@@ -88,4 +88,4 @@ The application uses Google AI to generate optimal schedules based on:
 
 ## License
 
-MIT License - see LICENSE file for details. 
+MIT License - see LICENSE file for details.
