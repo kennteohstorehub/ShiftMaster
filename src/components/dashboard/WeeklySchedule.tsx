@@ -33,6 +33,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useDroppable, useDraggable } from '@dnd-kit/core';
+import { generateInitials } from '@/lib/utils';
 
 const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const fullWeekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -81,7 +82,7 @@ function DraggableAssignedShift({ shift, staffMember, roleStyle }: { shift: Shif
             )}>
                 <Avatar className="h-6 w-6">
                     <AvatarImage src={staffMember.avatar} alt={staffMember.name} data-ai-hint="person face" />
-                    <AvatarFallback>{staffMember.name.charAt(0)}</AvatarFallback>
+                    <AvatarFallback>{generateInitials(staffMember.name)}</AvatarFallback>
                 </Avatar>
                 <span className="text-xs font-medium pr-1">{staffMember.name}</span>
             </div>

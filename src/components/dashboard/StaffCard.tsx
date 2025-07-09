@@ -1,7 +1,7 @@
 'use client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Staff } from '@/lib/types';
-import { cn } from '@/lib/utils';
+import { cn, generateInitials } from '@/lib/utils';
 import { useDraggable } from '@dnd-kit/core';
 
 export function StaffCard({ staff }: { staff: Staff }) {
@@ -31,7 +31,7 @@ export function StaffCard({ staff }: { staff: Staff }) {
     >
       <Avatar>
         <AvatarImage src={staff.avatar} alt={staff.name} data-ai-hint="person face" />
-        <AvatarFallback>{staff.name.charAt(0)}</AvatarFallback>
+        <AvatarFallback>{generateInitials(staff.name)}</AvatarFallback>
       </Avatar>
       <div>
         <p className="font-medium text-sm">{staff.name}</p>

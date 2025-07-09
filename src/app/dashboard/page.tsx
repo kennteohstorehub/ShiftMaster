@@ -7,7 +7,7 @@ import { useAppContext } from '@/components/AppContext';
 import { v4 as uuidv4 } from 'uuid';
 import type { Shift, Staff } from '@/lib/types';
 import { useState } from 'react';
-import { cn } from '@/lib/utils';
+import { cn, generateInitials } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 // This is the component that will be rendered as an overlay while dragging
@@ -20,7 +20,7 @@ function DraggableStaffCard({ staff }: { staff: Staff }) {
     >
       <Avatar>
         <AvatarImage src={staff.avatar} alt={staff.name} data-ai-hint="person face" />
-        <AvatarFallback>{staff.name.charAt(0)}</AvatarFallback>
+        <AvatarFallback>{generateInitials(staff.name)}</AvatarFallback>
       </Avatar>
       <div>
         <p className="font-medium text-sm">{staff.name}</p>

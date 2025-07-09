@@ -5,6 +5,7 @@ import { useAppContext } from '@/components/AppContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { generateInitials } from '@/lib/utils';
 import { PlusCircle, Trash2, Edit, MoreVertical } from 'lucide-react';
 import {
   DropdownMenu,
@@ -60,7 +61,7 @@ export function StaffSettings() {
                         <div className="flex items-center gap-3">
                             <Avatar>
                                 <AvatarImage src={staffMember.avatar} data-ai-hint="person face" />
-                                <AvatarFallback>{staffMember.name.charAt(0)}</AvatarFallback>
+                                <AvatarFallback>{generateInitials(staffMember.name)}</AvatarFallback>
                             </Avatar>
                             <div>
                                 <p className="font-medium">{staffMember.name}</p>
