@@ -1,0 +1,13 @@
+{
+  "buildCommand": "npm ci && npm run build",
+  "framework": "nextjs",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": ".next"
+      }
+    }
+  ]
+} 
