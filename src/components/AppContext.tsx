@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import type { Staff, Shift, Role } from '@/lib/types';
+import type { Staff, Shift, Role, LeaveRequest } from '@/lib/types';
 import { staff as initialStaff, shifts as initialShifts, roles as initialRoles } from '@/lib/data';
 import { generateWeeklyScheduleAction } from '@/app/actions';
 import type { GenerateWeeklyScheduleOutput } from '@/ai/flows/generate-weekly-schedule';
@@ -15,7 +15,7 @@ interface AppContextType {
   addStaff: (staffMember: Omit<Staff, 'id'>) => void;
   updateStaff: (staffMember: Staff) => void;
   deleteStaff: (staffId: string) => void;
-  generateSchedule: (options: { customRules?: string, days?: number[] }) => Promise<{ success: boolean; data?: GenerateWeeklyScheduleOutput; error?: string }>;
+  generateSchedule: (options: { customRules?: string, days?: number[], leaveRequests?: LeaveRequest[], weekStartDate?: string }) => Promise<{ success: boolean; data?: GenerateWeeklyScheduleOutput; error?: string }>;
   addShift: (shift: Omit<Shift, 'id'>) => void;
 }
 
@@ -40,7 +40,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setShifts(prev => prev.filter(s => s.staffId !== staffId));
   };
 
-  const generateSchedule = async (options: { customRules?: string, days?: number[] }) => {
+  const generateSchedule = async (options: { customRules?: string, days?: number[], leaveRequests?: LeaveRequest[], weekStartDate?: string }) => {
     const daysToGenerate = options.days || [0, 1, 2, 3, 4, 5, 6];
     
     const result = await generateWeeklyScheduleAction({ 
@@ -49,6 +49,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         customRules: options.customRules,
         existingShifts: shifts, 
         daysToGenerate,
+        leaveRequests: options.leaveRequests,
+        weekStartDate: options.weekStartDate,
     });
 
     if (result.success && result.data) {

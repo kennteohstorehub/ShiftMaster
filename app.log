@@ -1,0 +1,48 @@
+
+> shiftmaster@0.1.1 dev
+> next dev
+
+  ▲ Next.js 14.2.3
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1141ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 1573ms (956 modules)
+ GET /dashboard 200 in 1715ms
+ ✓ Compiled in 114ms (448 modules)
+ GET /dashboard 200 in 28ms
+ ✓ Compiled /favicon.ico in 93ms (538 modules)
+ GET /favicon.ico 200 in 122ms
+ ✓ Compiled in 99ms (448 modules)
+ ✓ Compiled in 59ms (448 modules)
+ ✓ Compiled in 72ms (448 modules)
+ ✓ Compiled in 210ms (995 modules)
+ ✓ Compiled in 89ms (995 modules)
+ ✓ Compiled in 173ms (995 modules)
+ ✓ Compiled in 199ms (997 modules)
+ ✓ Compiled in 556ms (1828 modules)
+ ✓ Compiled in 121ms (1828 modules)
+ ✓ Compiled in 102ms (1832 modules)
+ ✓ Compiled in 113ms (1832 modules)
+ ✓ Compiled in 100ms (1834 modules)
+ ✓ Compiled in 120ms (1834 modules)
+ ✓ Compiled in 109ms (1834 modules)
+ ✓ Compiled in 134ms (1834 modules)
+ ✓ Compiled in 142ms (1834 modules)
+ ✓ Compiled in 113ms (1834 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /dashboard 200 in 102ms
+ ✓ Compiled /favicon.ico in 78ms (976 modules)
+ GET /favicon.ico 200 in 105ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ✓ Compiled in 109ms (1864 modules)
+ GET /dashboard 200 in 144ms
+ GET /favicon.ico 200 in 5ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ✓ Compiled in 163ms (1864 modules)
+ GET /dashboard 200 in 131ms
+ GET /favicon.ico 200 in 6ms
+ GET /dashboard 200 in 30ms
+ GET /favicon.ico 200 in 2ms

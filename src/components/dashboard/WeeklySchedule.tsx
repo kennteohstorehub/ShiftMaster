@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Loader2, Sparkles, ChevronLeft, ChevronRight, ChevronsUpDown, UserPlus } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
-import type { Shift, Staff, Role } from '@/lib/types';
+import type { Shift, Staff, Role, LeaveRequest } from '@/lib/types';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -111,7 +111,12 @@ function DroppableEmptySlot({ slotInfo, roleStyle }: { slotInfo: any, roleStyle:
 }
 
 
-export default function WeeklySchedule() {
+interface WeeklyScheduleProps {
+  leaveRequests?: LeaveRequest[];
+  currentWeekStart?: Date;
+}
+
+export default function WeeklySchedule({ leaveRequests = [], currentWeekStart }: WeeklyScheduleProps) {
   const { shifts, staff, roles, generateSchedule } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
   const [aiReasoning, setAiReasoning] = useState('');
@@ -131,7 +136,11 @@ export default function WeeklySchedule() {
     setIsLoading(true);
     setAiReasoning('');
     setCustomizeDialogOpen(false);
-    const result = await generateSchedule(options);
+    const result = await generateSchedule({
+      ...options,
+      leaveRequests,
+      weekStartDate: currentWeekStart ? format(currentWeekStart, 'yyyy-MM-dd') : undefined
+    });
     setIsLoading(false);
 
     if (result.success && result.data) {

@@ -2,13 +2,15 @@
 
 import StaffPanel from '@/components/dashboard/StaffPanel';
 import WeeklySchedule from '@/components/dashboard/WeeklySchedule';
+import { LeaveManagementDialog } from '@/components/dashboard/LeaveManagementDialog';
 import { DndContext, type DragEndEvent, DragOverlay } from '@dnd-kit/core';
 import { useAppContext } from '@/components/AppContext';
 import { v4 as uuidv4 } from 'uuid';
-import type { Shift, Staff } from '@/lib/types';
+import type { Shift, Staff, LeaveRequest } from '@/lib/types';
 import { useState } from 'react';
 import { cn, generateInitials } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { startOfWeek } from 'date-fns';
 
 // This is the component that will be rendered as an overlay while dragging
 function DraggableStaffCard({ staff }: { staff: Staff }) {
@@ -35,6 +37,9 @@ function DraggableStaffCard({ staff }: { staff: Staff }) {
 export default function DashboardPage() {
   const { staff, shifts, setShifts } = useAppContext();
   const [activeDragStaff, setActiveDragStaff] = useState<Staff | null>(null);
+  const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
+  const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
+  const [currentWeekStart] = useState(startOfWeek(new Date()));
 
   const handleDragStart = (event: any) => {
     const { active } = event;
@@ -152,14 +157,29 @@ export default function DashboardPage() {
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <div className="flex flex-row w-full h-full">
-        <StaffPanel />
+        <StaffPanel 
+          leaveRequests={leaveRequests}
+          onOpenLeaveDialog={() => setLeaveDialogOpen(true)}
+        />
         <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-auto">
-          <WeeklySchedule />
+          <WeeklySchedule 
+            leaveRequests={leaveRequests}
+            currentWeekStart={currentWeekStart}
+          />
         </div>
       </div>
       <DragOverlay>
         {activeDragStaff ? <DraggableStaffCard staff={activeDragStaff} /> : null}
       </DragOverlay>
+      
+      <LeaveManagementDialog
+        open={leaveDialogOpen}
+        onOpenChange={setLeaveDialogOpen}
+        staff={staff}
+        currentWeekStart={currentWeekStart}
+        onLeaveRequestsChange={setLeaveRequests}
+        existingLeaveRequests={leaveRequests}
+      />
     </DndContext>
   );
 }
