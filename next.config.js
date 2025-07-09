@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverActions: true,
-  },
+  // Server Actions are now enabled by default in Next.js 14.2.3
+  // experimental: {
+  //   serverActions: true,
+  // },
   images: {
     domains: ['placehold.co'],
   },

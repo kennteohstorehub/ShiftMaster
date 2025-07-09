@@ -54,8 +54,10 @@ export default function DashboardPage() {
 
     // A shift is dropped outside of any valid area, so remove it.
     if (!over && activeIsShift) {
-        const draggedShift = active.data.current!.shift as Shift;
-        setShifts(prev => prev.filter(s => s.id !== draggedShift.id));
+        const draggedShift = active.data.current?.shift as Shift;
+        if (draggedShift) {
+          setShifts(prev => prev.filter(s => s.id !== draggedShift.id));
+        }
         return;
     }
 
@@ -73,11 +75,13 @@ export default function DashboardPage() {
 
     if (!overIsShift && !overIsEmptySlot) return;
 
-    const overData = over.data.current.slot;
+    const overData = over.data.current?.slot;
+    if (!overData) return;
 
     // Case 1: Drag staff from panel to a slot
     if (activeIsStaff) {
-      const draggedStaffId = active.data.current.staff.id;
+      const draggedStaffId = active.data.current?.staff?.id;
+      if (!draggedStaffId) return;
       
       // Sub-case 1a: Drop on an empty slot -> Create new shift
       if (overIsEmptySlot) {
@@ -92,19 +96,24 @@ export default function DashboardPage() {
       
       // Sub-case 1b: Drop on a filled slot -> Replace staff
       if (overIsShift) {
-        const targetShift = over.data.current.shift;
-        setShifts(prev => prev.map(s => s.id === targetShift.id ? { ...s, staffId: draggedStaffId } : s));
+        const targetShift = over.data.current?.shift;
+        if (targetShift) {
+          setShifts(prev => prev.map(s => s.id === targetShift.id ? { ...s, staffId: draggedStaffId } : s));
+        }
         return;
       }
     }
 
     // Case 2: Drag a shift from the schedule
     if (activeIsShift) {
-        const draggedShift = active.data.current.shift as Shift;
+        const draggedShift = active.data.current?.shift as Shift;
+        if (!draggedShift) return;
         
         // Sub-case 2a: Drop on another filled slot -> Swap staff
         if (overIsShift) {
-            const targetShift = over.data.current.shift as Shift;
+            const targetShift = over.data.current?.shift as Shift;
+            if (!targetShift) return;
+            
             // Prevent swapping with self
             if (draggedShift.id === targetShift.id) return;
             
