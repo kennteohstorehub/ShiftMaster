@@ -33,8 +33,8 @@ npm install
 
 3. Set up environment variables:
 ```bash
-cp .env.example .env.local
-# Add your Google AI API key
+cp env.example .env.local
+# Add your API keys (see Setup Guide below)
 ```
 
 4. Run the development server:
@@ -78,6 +78,36 @@ The application uses Google AI to generate optimal schedules based on:
 - Operational requirements
 - Existing shift constraints
 - Custom rules and preferences
+
+## Deployment Guide
+
+### Quick Deploy to Vercel (FREE)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/kennteohstorehub/ShiftMaster)
+
+### Manual Setup
+
+1. **Deploy to Vercel**:
+   - Connect your GitHub repo to Vercel
+   - Vercel will auto-detect Next.js and deploy
+
+2. **Set up Supabase** (Database + Auth):
+   - Sign up at [supabase.com](https://supabase.com)
+   - Create a new project
+   - Copy your project URL and keys
+
+3. **Configure Environment Variables** in Vercel:
+   ```
+   GOOGLE_GENAI_API_KEY=your_google_ai_key
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+
+4. **Get API Keys**:
+   - **Google AI**: Get free key at [aistudio.google.com](https://aistudio.google.com)
+   - **Supabase**: Available in your project dashboard
+
+### Total Cost: $0/month for small teams! 🎉
 
 ## Contributing
 
