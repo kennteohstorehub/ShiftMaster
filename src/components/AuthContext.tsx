@@ -40,9 +40,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const configured = checkSupabaseConfig()
     setIsSupabaseConfigured(configured)
 
-    if (!configured) {
-      console.warn('🔧 Development Mode: Supabase not configured')
+    // Development bypass for localhost
+    if (!configured || (process.env.NODE_ENV === 'development' && window.location.hostname === 'localhost')) {
+      console.warn('🔧 Development Mode: Using local authentication')
+      // Auto-login as super admin for development
+      const devUser: User = {
+        id: 'dev-user-id',
+        email: 'kenn.teoh@storehub.com',
+        role: 'super_admin',
+        created_at: new Date().toISOString(),
+        last_sign_in_at: new Date().toISOString()
+      }
+      setUser(devUser)
       setLoading(false)
+      router.push('/dashboard')
       return
     }
 
