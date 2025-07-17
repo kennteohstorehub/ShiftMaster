@@ -34,6 +34,8 @@ import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { useDroppable, useDraggable } from '@dnd-kit/core';
 import { generateInitials } from '@/lib/utils';
+import { SkeletonSchedule } from '@/components/ui/skeleton-loader';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const fullWeekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -75,10 +77,10 @@ function DraggableAssignedShift({ shift, staffMember, roleStyle }: { shift: Shif
     return (
         <div ref={(node) => { setNodeRef(node); setDropRef(node); }} style={style} {...listeners} {...attributes}>
             <div className={cn(
-                'flex items-center gap-2 p-1.5 rounded-md border shadow-sm cursor-grab active:cursor-grabbing',
+                'flex items-center gap-2 p-1.5 rounded-md border shadow-sm cursor-grab active:cursor-grabbing transition-all duration-200 hover:shadow-md',
                 roleStyle?.bg,
                 roleStyle?.border,
-                isOver && 'outline-2 outline-ring outline-dashed'
+                isOver && 'ring-2 ring-primary ring-offset-2 ring-offset-background scale-105'
             )}>
                 <Avatar className="h-6 w-6">
                     <AvatarImage src={staffMember.avatar} alt={staffMember.name} data-ai-hint="person face" />
@@ -101,11 +103,11 @@ function DroppableEmptySlot({ slotInfo, roleStyle }: { slotInfo: any, roleStyle:
 
     return (
         <div ref={setNodeRef} className={cn(
-            "h-[42px] rounded-md flex items-center justify-center border-2 border-dashed",
+            "h-[42px] rounded-md flex items-center justify-center border-2 border-dashed transition-all duration-200",
             roleStyle?.border,
-            isOver ? 'bg-accent/80' : 'bg-transparent'
+            isOver ? 'bg-primary/20 border-primary scale-105 shadow-md' : 'bg-transparent hover:bg-accent/10'
         )}>
-           <UserPlus className={cn("h-5 w-5", roleStyle?.text, "opacity-50")} />
+           <UserPlus className={cn("h-5 w-5 transition-all duration-200", roleStyle?.text, "opacity-50", isOver && "opacity-100 scale-110")} />
         </div>
     );
 }
@@ -124,6 +126,7 @@ export default function WeeklySchedule({ leaveRequests = [], currentWeekStart }:
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isCustomizeDialogOpen, setCustomizeDialogOpen] = useState(false);
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const handleGenerateSchedule = async (optionsOrRules: { customRules?: string, days?: number[] } | string) => {
     let options: { customRules?: string, days?: number[] };
@@ -181,6 +184,76 @@ export default function WeeklySchedule({ leaveRequests = [], currentWeekStart }:
     if (view === 'daily') setCurrentDate(add(currentDate, { days: 1 }));
     if (view === 'weekly') setCurrentDate(add(currentDate, { weeks: 1 }));
     if (view === 'monthly') setCurrentDate(add(currentDate, { months: 1 }));
+  };
+
+  // Mobile card view for daily schedule
+  const renderMobileView = () => {
+    const dayShifts = shiftsByDay[currentDate.getDay()] || [];
+    
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold">{format(currentDate, 'EEEE, MMMM d')}</h3>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={prev}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="sm" onClick={next}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+        
+        {roles.map(role => (
+          <div key={role.id} className="space-y-2">
+            <h4 className={cn("font-medium text-sm", roleStyles[role.id]?.text)}>
+              {role.name}
+            </h4>
+            <div className="space-y-2">
+              {shiftTimes.map(time => {
+                const [startTime, endTime] = time.split('-');
+                const roleShifts = dayShifts.filter(s => 
+                  s.roleId === role.id && s.startTime === startTime && s.endTime === endTime
+                );
+                const emptySlotsCount = role.requiredAgents - roleShifts.length;
+                
+                return (
+                  <Card key={time} className={cn("p-3", roleStyles[role.id]?.bg)}>
+                    <p className="text-sm font-medium mb-2">{time}</p>
+                    <div className="space-y-2">
+                      {roleShifts.map(shift => {
+                        const staffMember = staff.find(s => s.id === shift.staffId);
+                        return staffMember ? (
+                          <DraggableAssignedShift 
+                            key={shift.id} 
+                            shift={shift} 
+                            staffMember={staffMember} 
+                            roleStyle={roleStyles[role.id]} 
+                          />
+                        ) : null;
+                      })}
+                      {Array.from({ length: emptySlotsCount > 0 ? emptySlotsCount : 0 }).map((_, i) => (
+                        <DroppableEmptySlot 
+                          key={`${currentDate.getDay()}-${time}-${i}`} 
+                          roleStyle={roleStyles[role.id]}
+                          slotInfo={{
+                            day: currentDate.getDay(),
+                            roleId: role.id,
+                            startTime,
+                            endTime,
+                            uniqueId: i,
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   };
 
   const renderWeeklyView = () => (
@@ -322,11 +395,13 @@ export default function WeeklySchedule({ leaveRequests = [], currentWeekStart }:
                 </div>
             </div>
             <div className="flex flex-col items-end gap-4">
-                 <RadioGroup defaultValue="weekly" onValueChange={(v) => setView(v as any)} className="flex items-center space-x-2">
-                    <div className="flex items-center space-x-1"><RadioGroupItem value="daily" id="daily" /><Label htmlFor="daily">Daily</Label></div>
-                    <div className="flex items-center space-x-1"><RadioGroupItem value="weekly" id="weekly" /><Label htmlFor="weekly">Weekly</Label></div>
-                    <div className="flex items-center space-x-1"><RadioGroupItem value="monthly" id="monthly" /><Label htmlFor="monthly">Monthly</Label></div>
-                 </RadioGroup>
+                 {!isMobile && (
+                   <RadioGroup defaultValue="weekly" onValueChange={(v) => setView(v as any)} className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-1"><RadioGroupItem value="daily" id="daily" /><Label htmlFor="daily">Daily</Label></div>
+                      <div className="flex items-center space-x-1"><RadioGroupItem value="weekly" id="weekly" /><Label htmlFor="weekly">Weekly</Label></div>
+                      <div className="flex items-center space-x-1"><RadioGroupItem value="monthly" id="monthly" /><Label htmlFor="monthly">Monthly</Label></div>
+                   </RadioGroup>
+                 )}
                 <div className="flex rounded-md shadow-sm">
                     <Button onClick={() => handleGenerateSchedule({})} disabled={isLoading} size="lg" className="rounded-r-none">
                         {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Sparkles className="mr-2 h-5 w-5" />}
@@ -369,12 +444,18 @@ export default function WeeklySchedule({ leaveRequests = [], currentWeekStart }:
                 </AlertDescription>
             </Alert>
         )}
-        {view === 'weekly' || view === 'daily' ? renderWeeklyView() : renderMonthlyView()}
+        {isLoading ? (
+          <SkeletonSchedule />
+        ) : isMobile ? (
+          renderMobileView()
+        ) : (
+          view === 'weekly' || view === 'daily' ? renderWeeklyView() : renderMonthlyView()
+        )}
       </CardContent>
       {shifts.length === 0 && !isLoading && (
         <CardContent>
             <div className='text-center p-8 text-muted-foreground'>
-                Your schedule is empty. <br/>Click the "Generate AI Schedule" button to begin.
+                Your schedule is empty. <br/>Click the &quot;Generate AI Schedule&quot; button to begin.
             </div>
         </CardContent>
       )}

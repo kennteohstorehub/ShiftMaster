@@ -46,3 +46,188 @@
  GET /favicon.ico 200 in 6ms
  GET /dashboard 200 in 30ms
  GET /favicon.ico 200 in 2ms
+ ✓ Compiled in 108ms (888 modules)
+ ✓ Compiled in 67ms (888 modules)
+ ✓ Compiled in 59ms (888 modules)
+ ✓ Compiled in 65ms (888 modules)
+ ✓ Compiled in 60ms (888 modules)
+ ✓ Compiled in 100ms (1820 modules)
+ ✓ Compiled in 63ms (888 modules)
+ ✓ Compiled in 58ms (888 modules)
+ ✓ Compiled in 55ms (888 modules)
+ ✓ Compiled in 56ms (888 modules)
+ ✓ Compiled in 459ms (1992 modules)
+ ✓ Compiled in 169ms (1993 modules)
+ ✓ Compiled in 55ms (951 modules)
+ ✓ Compiled in 58ms (951 modules)
+ ✓ Compiled in 258ms (2005 modules)
+ ✓ Compiled /src/middleware in 92ms (73 modules)
+ ✓ Compiled /login in 291ms (1999 modules)
+ ✓ Compiled /_not-found in 74ms (2002 modules)
+ ✓ Compiled /_error in 376ms (2225 modules)
+ GET /login 404 in 802ms
+ ⨯ Error: Cannot find module './vendor-chunks/@supabase.js'
+Require stack:
+- /Users/kennteoh/Development/ShiftMaster/.next/server/webpack-runtime.js
+- /Users/kennteoh/Development/ShiftMaster/.next/server/pages/_document.js
+- /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/require.js
+- /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/load-components.js
+- /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/build/utils.js
+- /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/router-server.js
+- /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/start-server.js
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1405:15)
+    at /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1061:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1066:22)
+    at Module._load (node:internal/modules/cjs/loader:1215:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16)
+    at __webpack_require__.f.require (/Users/kennteoh/Development/ShiftMaster/.next/server/webpack-runtime.js:203:28)
+    at /Users/kennteoh/Development/ShiftMaster/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/kennteoh/Development/ShiftMaster/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/kennteoh/Development/ShiftMaster/.next/server/webpack-runtime.js:162:22)
+    at /Users/kennteoh/Development/ShiftMaster/.next/server/app/login/page.js:543:47
+    at Object.<anonymous> (/Users/kennteoh/Development/ShiftMaster/.next/server/app/login/page.js:546:3)
+    at Module._compile (node:internal/modules/cjs/loader:1734:14)
+    at Object..js (node:internal/modules/cjs/loader:1899:10)
+    at Module.load (node:internal/modules/cjs/loader:1469:32)
+    at Module._load (node:internal/modules/cjs/loader:1286:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16)
+    at requirePage (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/require.js:109:84)
+    at /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/load-components.js:98:84
+    at async loadComponentsImpl (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/load-components.js:98:26)
+    at async DevServer.findPageComponentsImpl (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/next-server.js:710:36)
+    at async DevServer.findPageComponents (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderPageComponent (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/base-server.js:1910:24)
+    at async DevServer.renderToResponseImpl (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/base-server.js:920:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/base-server.js:816:17)
+    at async /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/router-server.js:174:21)
+    at async handleRequest (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/router-server.js:353:24)
+    at async requestHandlerImpl (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/router-server.js:377:13)
+    at async Server.requestListener (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/kennteoh/Development/ShiftMaster/.next/server/webpack-runtime.js',
+    '/Users/kennteoh/Development/ShiftMaster/.next/server/pages/_document.js',
+    '/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/require.js',
+    '/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/load-components.js',
+    '/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/build/utils.js',
+    '/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/start-server.js'
+  ],
+  page: '/login'
+}
+ GET /login 500 in 32ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, lstat '/Users/kennteoh/Development/ShiftMaster/.next/server/app/favicon.ico'
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving '../../../../.next/server/app/favicon.ico/route' in /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server for build dependencies doesn't lead to expected result '/Users/kennteoh/Development/ShiftMaster/.next/server/app/favicon.ico/route.js', but to 'Error: Can't resolve '../../../../.next/server/app/favicon.ico/route' in '/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ../../../../.next/server/app/favicon.ico/route (expected /Users/kennteoh/Development/ShiftMaster/.next/server/app/favicon.ico/route.js)
+<w>  at file dependencies /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/require.js
+<w>  at file /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/build/utils.js
+<w>  at file /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/build/handle-externals.js
+<w>  at file /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/build/handle-externals.js
+<w>  at file dependencies /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w>  at file /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+<w>  at resolve commonjs /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js
+ ⨯ Error: Cannot find module './vendor-chunks/@supabase.js'
+Require stack:
+- /Users/kennteoh/Development/ShiftMaster/.next/server/webpack-runtime.js
+- /Users/kennteoh/Development/ShiftMaster/.next/server/pages/_document.js
+- /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/require.js
+- /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/load-components.js
+- /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/build/utils.js
+- /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/dev/hot-middleware.js
+- /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/dev/hot-reloader-webpack.js
+- /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/router-server.js
+- /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/start-server.js
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1405:15)
+    at /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/require-hook.js:55:36
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1061:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1066:22)
+    at Module._load (node:internal/modules/cjs/loader:1215:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16)
+    at __webpack_require__.f.require (/Users/kennteoh/Development/ShiftMaster/.next/server/webpack-runtime.js:203:28)
+    at /Users/kennteoh/Development/ShiftMaster/.next/server/webpack-runtime.js:111:40
+    at Array.reduce (<anonymous>)
+    at __webpack_require__.e (/Users/kennteoh/Development/ShiftMaster/.next/server/webpack-runtime.js:110:67)
+    at Array.map (<anonymous>)
+    at __webpack_require__.X (/Users/kennteoh/Development/ShiftMaster/.next/server/webpack-runtime.js:162:22)
+    at /Users/kennteoh/Development/ShiftMaster/.next/server/app/login/page.js:543:47
+    at Object.<anonymous> (/Users/kennteoh/Development/ShiftMaster/.next/server/app/login/page.js:546:3)
+    at Module._compile (node:internal/modules/cjs/loader:1734:14)
+    at Object..js (node:internal/modules/cjs/loader:1899:10)
+    at Module.load (node:internal/modules/cjs/loader:1469:32)
+    at Module._load (node:internal/modules/cjs/loader:1286:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1491:12)
+    at mod.require (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/require-hook.js:65:28)
+    at require (node:internal/modules/helpers:135:16)
+    at requirePage (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/require.js:109:84)
+    at /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/load-components.js:98:84
+    at async loadComponentsImpl (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/load-components.js:98:26)
+    at async DevServer.findPageComponentsImpl (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/next-server.js:710:36)
+    at async DevServer.findPageComponents (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/dev/next-dev-server.js:577:20)
+    at async DevServer.renderPageComponent (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/base-server.js:1910:24)
+    at async DevServer.renderToResponseImpl (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/base-server.js:920:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/base-server.js:816:17)
+    at async /Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/router-server.js:174:21)
+    at async handleRequest (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/router-server.js:353:24)
+    at async requestHandlerImpl (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/router-server.js:377:13)
+    at async Server.requestListener (/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/kennteoh/Development/ShiftMaster/.next/server/webpack-runtime.js',
+    '/Users/kennteoh/Development/ShiftMaster/.next/server/pages/_document.js',
+    '/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/require.js',
+    '/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/load-components.js',
+    '/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/build/utils.js',
+    '/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/dev/hot-middleware.js',
+    '/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/dev/hot-reloader-webpack.js',
+    '/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js',
+    '/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/router-server.js',
+    '/Users/kennteoh/Development/ShiftMaster/node_modules/next/dist/server/lib/start-server.js'
+  ],
+  page: '/login'
+}
+ GET /login 500 in 7ms
+ ✓ Compiled /favicon.ico in 61ms (1124 modules)
+ GET /favicon.ico 200 in 92ms
+ ✓ Compiled in 743ms (2231 modules)
+ ✓ Compiled in 140ms (2231 modules)
+ ✓ Compiled in 94ms (1144 modules)
+ ✓ Compiled in 340ms (1217 modules)
+[?25h

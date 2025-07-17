@@ -11,6 +11,12 @@ import { useState } from 'react';
 import { cn, generateInitials } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { startOfWeek } from 'date-fns';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Button } from '@/components/ui/button';
+import { Users } from 'lucide-react';
+import { InlineMessage } from '@/components/ui/inline-message';
+import { useToast } from '@/hooks/use-toast';
 
 // This is the component that will be rendered as an overlay while dragging
 function DraggableStaffCard({ staff }: { staff: Staff }) {
@@ -40,6 +46,10 @@ export default function DashboardPage() {
   const [leaveRequests, setLeaveRequests] = useState<LeaveRequest[]>([]);
   const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
   const [currentWeekStart] = useState(startOfWeek(new Date()));
+  const [mobileStaffPanelOpen, setMobileStaffPanelOpen] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState<{ type: 'success' | 'error' | 'info'; message: string } | null>(null);
+  const isMobile = useIsMobile();
+  const { toast } = useToast();
 
   const handleDragStart = (event: any) => {
     const { active } = event;
@@ -96,6 +106,9 @@ export default function DashboardPage() {
           ...overData,
         };
         setShifts(prev => [...prev, newShift]);
+        const staffName = staff.find(s => s.id === draggedStaffId)?.name || 'Staff';
+        setFeedbackMessage({ type: 'success', message: `${staffName} assigned to shift` });
+        setTimeout(() => setFeedbackMessage(null), 3000);
         return;
       }
       
@@ -104,6 +117,9 @@ export default function DashboardPage() {
         const targetShift = over.data.current?.shift;
         if (targetShift) {
           setShifts(prev => prev.map(s => s.id === targetShift.id ? { ...s, staffId: draggedStaffId } : s));
+          const staffName = staff.find(s => s.id === draggedStaffId)?.name || 'Staff';
+          setFeedbackMessage({ type: 'success', message: `${staffName} replaced in shift` });
+          setTimeout(() => setFeedbackMessage(null), 3000);
         }
         return;
       }
@@ -156,12 +172,49 @@ export default function DashboardPage() {
 
   return (
     <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-      <div className="flex flex-row w-full h-full">
-        <StaffPanel 
-          leaveRequests={leaveRequests}
-          onOpenLeaveDialog={() => setLeaveDialogOpen(true)}
-        />
+      <div className="flex flex-row w-full h-full relative">
+        {/* Desktop Staff Panel */}
+        {!isMobile && (
+          <StaffPanel 
+            leaveRequests={leaveRequests}
+            onOpenLeaveDialog={() => setLeaveDialogOpen(true)}
+          />
+        )}
+        
+        {/* Mobile Staff Panel Sheet */}
+        {isMobile && (
+          <Sheet open={mobileStaffPanelOpen} onOpenChange={setMobileStaffPanelOpen}>
+            <SheetTrigger asChild>
+              <Button 
+                variant="outline" 
+                size="icon"
+                className="fixed bottom-4 right-4 z-50 h-14 w-14 rounded-full shadow-lg hover-lift"
+              >
+                <Users className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="p-0 w-80">
+              <StaffPanel 
+                leaveRequests={leaveRequests}
+                onOpenLeaveDialog={() => {
+                  setLeaveDialogOpen(true);
+                  setMobileStaffPanelOpen(false);
+                }}
+              />
+            </SheetContent>
+          </Sheet>
+        )}
+        
         <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-auto">
+          {feedbackMessage && (
+            <div className="mb-4 animate-in fade-in slide-in-from-top-2">
+              <InlineMessage
+                variant={feedbackMessage.type}
+                message={feedbackMessage.message}
+                onClose={() => setFeedbackMessage(null)}
+              />
+            </div>
+          )}
           <WeeklySchedule 
             leaveRequests={leaveRequests}
             currentWeekStart={currentWeekStart}

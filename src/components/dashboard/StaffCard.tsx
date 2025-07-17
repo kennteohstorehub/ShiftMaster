@@ -42,7 +42,7 @@ export function StaffCard({ staff, leaveRequests = [] }: StaffCardProps) {
       {...listeners}
       {...attributes}
       className={cn(
-        'flex items-center gap-3 p-2 rounded-lg border bg-card shadow-sm cursor-grab active:cursor-grabbing hover:bg-accent/50',
+        'flex items-center gap-3 p-2 rounded-lg border bg-card shadow-sm cursor-grab active:cursor-grabbing transition-base hover-lift focus-ring',
         isDragging && 'opacity-30'
       )}
     >
