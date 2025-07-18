@@ -21,6 +21,9 @@ const createMockSupabaseClient = () => ({
     signInWithOtp: () => Promise.resolve({ 
       error: { message: 'Supabase not configured. Please set up your environment variables.' } 
     }),
+    signInWithPassword: () => Promise.resolve({ 
+      error: { message: 'Supabase not configured. Please set up your environment variables.' } 
+    }),
     signOut: () => Promise.resolve({ error: null })
   }
 })
