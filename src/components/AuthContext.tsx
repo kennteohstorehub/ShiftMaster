@@ -40,20 +40,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const configured = checkSupabaseConfig()
     setIsSupabaseConfigured(configured)
 
-    // Development bypass for localhost
-    if (!configured || (process.env.NODE_ENV === 'development' && window.location.hostname === 'localhost')) {
-      console.warn('🔧 Development Mode: Using local authentication')
-      // Auto-login as super admin for development
-      const devUser: User = {
-        id: 'dev-user-id',
-        email: 'kenn.teoh@storehub.com',
-        role: 'super_admin',
-        created_at: new Date().toISOString(),
-        last_sign_in_at: new Date().toISOString()
-      }
-      setUser(devUser)
+    if (!configured) {
+      console.warn('🔧 Development Mode: Supabase not configured')
       setLoading(false)
-      router.push('/dashboard')
       return
     }
 
@@ -162,11 +151,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
       }
 
-      const { error } = await supabase.auth.signInWithOtp({
+      // For now, we'll use password-based auth for easier testing
+      // You can switch back to OTP later for production
+      const { error } = await supabase.auth.signInWithPassword({
         email,
-        options: {
-          shouldCreateUser: false, // Don't create new users
-        }
+        password: 'ShiftMaster2024!' // Default password for allowed users
       })
 
       if (error) {

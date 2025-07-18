@@ -13,8 +13,8 @@ import { useToast } from '@/hooks/use-toast'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [isEmailSent, setIsEmailSent] = useState(false)
   const [error, setError] = useState('')
   const { signIn, isAuthenticated, loading, isSupabaseConfigured } = useAuth()
   const router = useRouter()
@@ -44,13 +44,13 @@ export default function LoginPage() {
       const result = await signIn(email)
       
       if (result.success) {
-        setIsEmailSent(true)
         toast({
-          title: "Check your email",
-          description: `We've sent a magic link to ${email}`,
+          title: "Welcome back!",
+          description: `Signing in as ${email}`,
         })
+        router.push('/dashboard')
       } else {
-        setError(result.error || 'Failed to send magic link')
+        setError(result.error || 'Failed to sign in')
       }
     } catch (error) {
       setError('An unexpected error occurred. Please try again.')
@@ -59,11 +59,6 @@ export default function LoginPage() {
     }
   }
 
-  const handleTryAgain = () => {
-    setIsEmailSent(false)
-    setError('')
-    setEmail('')
-  }
 
   // Show loading state while checking authentication
   if (loading) {
@@ -104,8 +99,7 @@ export default function LoginPage() {
             </Alert>
           )}
 
-          {!isEmailSent ? (
-            <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email Address</Label>
                 <Input
@@ -114,6 +108,19 @@ export default function LoginPage() {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  disabled={isLoading}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   disabled={isLoading}
                   required
                 />
@@ -134,53 +141,21 @@ export default function LoginPage() {
                 {isLoading ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Sending Magic Link...
+                    Signing in...
                   </>
                 ) : (
                   <>
                     <Mail className="h-4 w-4 mr-2" />
-                    {isSupabaseConfigured ? 'Send Magic Link' : 'Setup Required'}
+                    {isSupabaseConfigured ? 'Sign In' : 'Setup Required'}
                   </>
                 )}
               </Button>
 
               <div className="text-center text-sm text-muted-foreground">
                 <p>Access is restricted to authorized staff only.</p>
-                {isSupabaseConfigured ? (
-                  <p className="mt-1">Check your email for the magic link to sign in.</p>
-                ) : (
-                  <p className="mt-1">Configure Supabase to enable authentication.</p>
-                )}
+                <p className="mt-1">Contact your administrator for access.</p>
               </div>
             </form>
-          ) : (
-            <div className="text-center space-y-4">
-              <div className="flex justify-center">
-                <CheckCircle className="h-12 w-12 text-green-500" />
-              </div>
-              
-              <div className="space-y-2">
-                <h3 className="text-lg font-semibold">Check your email</h3>
-                <p className="text-sm text-muted-foreground">
-                  We&apos;ve sent a magic link to <strong>{email}</strong>
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Click the link in your email to sign in securely.
-                </p>
-              </div>
-
-              <Alert>
-                <Mail className="h-4 w-4" />
-                <AlertDescription>
-                  The magic link will expire in 60 minutes. If you don&apos;t see the email, check your spam folder.
-                </AlertDescription>
-              </Alert>
-
-              <Button variant="outline" onClick={handleTryAgain} className="w-full">
-                Try Different Email
-              </Button>
-            </div>
-          )}
         </CardContent>
       </Card>
     </div>

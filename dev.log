@@ -2,11 +2,27 @@
 > shiftmaster@0.1.1 dev
 > next dev
 
- ⚠ Port 3000 is in use, trying 3001 instead.
   ▲ Next.js 14.2.3
-  - Local:        http://localhost:3001
+  - Local:        http://localhost:3000
   - Environments: .env.local
 
  ✓ Starting...
- ✓ Ready in 1251ms
+ ✓ Ready in 1059ms
+ ✓ Compiled /src/middleware in 77ms (73 modules)
+ ○ Compiling /login ...
+ ✓ Compiled /login in 1027ms (728 modules)
+ GET /login 200 in 1155ms
+ ✓ Compiled in 85ms (343 modules)
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 535ms (415 modules)
+ GET /favicon.ico 200 in 578ms
+ GET /login 200 in 69ms
+ GET /login 200 in 16ms
+ GET /login 200 in 11ms
+ GET /login 200 in 21ms
+ ✓ Compiled in 170ms (416 modules)
+ GET /login 200 in 21ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 1057ms (2047 modules)
+ GET /favicon.ico 200 in 1076ms
 [?25h
