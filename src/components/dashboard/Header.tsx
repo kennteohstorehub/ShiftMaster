@@ -3,7 +3,7 @@
 import { Bot, Cog, LogOut, User, Crown } from 'lucide-react';
 import { SettingsSheet } from './settings/SettingsSheet';
 import { Button } from '../ui/button';
-import { useAuth } from '@/components/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import {
   DropdownMenu,

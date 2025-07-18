@@ -11,7 +11,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { StaffSettings } from "./StaffSettings";
 import { UserManagement } from "./UserManagement";
-import { useAuth } from "@/components/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 
 export function SettingsSheet({ children }: { children: React.ReactNode }) {
   const { isSuperAdmin } = useAuth();

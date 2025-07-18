@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-ShiftMaster is a modern AI-powered staff scheduling application built with Next.js 14, TypeScript, and Google AI (Gemini). It features intelligent schedule generation, drag-and-drop shift management, and comprehensive leave management.
+ShiftMaster is a modern AI-powered staff scheduling application built with Next.js 14, TypeScript, Google AI (Gemini), and PostgreSQL (Neon). It features intelligent schedule generation, drag-and-drop shift management, comprehensive leave management, and role-based authentication.
 
 ## Common Development Commands
 
@@ -13,6 +13,13 @@ npm run dev            # Start development server (http://localhost:3000)
 npm run build          # Build for production
 npm start              # Start production server
 npm run lint           # Run ESLint checks
+
+# Database commands
+npm run db:generate    # Generate Prisma client
+npm run db:push        # Push schema to database
+npm run db:migrate     # Run database migrations
+npm run db:seed        # Seed initial data
+npm run db:studio      # Open Prisma Studio GUI
 ```
 
 ## Architecture
@@ -21,10 +28,11 @@ npm run lint           # Run ESLint checks
 - **Frontend Framework**: Next.js 14 (App Router)
 - **Language**: TypeScript with strict mode
 - **UI**: Tailwind CSS + Shadcn/ui components
-- **Database & Auth**: Supabase
+- **Database**: PostgreSQL (Neon) with Prisma ORM
+- **Authentication**: NextAuth.js with credentials and GitHub providers
 - **AI Integration**: Google AI (Gemini 2.0 Flash) via Firebase Genkit
 - **Drag & Drop**: @dnd-kit/core
-- **State Management**: React Context API
+- **State Management**: React Context API with server persistence
 - **Date Handling**: date-fns
 
 ### Project Structure
@@ -33,7 +41,14 @@ The application follows Next.js 14 App Router conventions with a clear separatio
 
 ```
 src/
-├── app/                    # Next.js App Router pages and server actions
+├── app/                    # Next.js App Router pages and API routes
+│   ├── api/               # RESTful API endpoints
+│   │   ├── auth/          # NextAuth.js authentication
+│   │   ├── staff/         # Staff CRUD operations
+│   │   ├── shifts/        # Shift management
+│   │   ├── roles/         # Role management
+│   │   ├── leave-requests/# Leave request handling
+│   │   └── tasks/         # Task management
 │   ├── dashboard/         # Main dashboard (protected route)
 │   ├── login/            # Authentication page
 │   └── actions.ts        # Server actions for AI scheduling
@@ -43,35 +58,55 @@ src/
 │   │   └── *.tsx        # Schedule, staff panels, dialogs
 │   └── ui/              # Reusable Shadcn/ui components
 ├── lib/
-│   ├── types.ts         # Core TypeScript types (Staff, Shift, LeaveRequest, etc.)
-│   ├── data.ts          # Sample data and constants
-│   ├── supabase.ts      # Supabase client configuration
+│   ├── auth.ts          # NextAuth configuration
+│   ├── db.ts            # Database operations
+│   ├── prisma.ts        # Prisma client instance
+│   ├── types.ts         # Core TypeScript types
 │   └── utils.ts         # Utility functions
-└── middleware.ts        # Auth middleware for route protection
+├── hooks/               # Custom React hooks including useAuth
+├── middleware.ts        # Auth middleware for route protection
+└── prisma/
+    ├── schema.prisma    # Database schema
+    └── seed.ts          # Database seeding script
 ```
 
 ### Core Architectural Patterns
 
-1. **Context-Based State Management**: The `AppContext` manages global application state for staff, shifts, roles, and tasks. All dashboard components access state through this context.
+1. **Context-Based State Management**: The `AppContext` manages global application state for staff, shifts, roles, and tasks. It syncs with the database through API calls.
 
 2. **Server Actions for AI**: AI schedule generation is handled through Next.js server actions (`app/actions.ts`), keeping API keys secure on the server side.
 
-3. **Drag & Drop System**: Uses @dnd-kit for complex drag operations:
+3. **RESTful API Design**: All database operations go through properly authenticated API routes in `app/api/`.
+
+4. **Authentication Flow**: 
+   - NextAuth.js handles authentication with multiple providers
+   - Middleware protects dashboard routes
+   - Role-based access control (SUPER_ADMIN, ADMIN, USER)
+
+5. **Drag & Drop System**: Uses @dnd-kit for complex drag operations:
    - Staff can be dragged from the panel to empty schedule slots
    - Existing shifts can be dragged to swap staff or move to different slots
    - Shifts can be dragged outside to remove them
 
-4. **Type-First Development**: All data structures are strongly typed in `lib/types.ts`, including:
-   - `Staff`: Employee data with skills and availability
-   - `Shift`: Time slot assignments with role requirements
-   - `LeaveRequest`: Comprehensive leave management system
-   - `Role`: Operational roles with staffing requirements
+6. **Type-First Development**: All data structures are strongly typed in `lib/types.ts`
 
-### Authentication & Database
+### Database Schema (Prisma)
 
-- **Supabase Integration**: Handles both authentication and data persistence
+```prisma
+- User: Authentication and role management
+- Staff: Employee profiles with skills and availability
+- Role: Operational roles with staffing requirements
+- Shift: Scheduled work assignments
+- LeaveRequest: Time-off management system
+- Task: Todo items and reminders
+```
+
+### Authentication & Security
+
+- **NextAuth.js**: Handles authentication with credentials and GitHub OAuth
 - **Middleware Protection**: Routes under `/dashboard` require authentication
-- **Environment Variables**: All Supabase configuration via env vars
+- **Role-Based Access**: Different permissions for SUPER_ADMIN, ADMIN, and USER
+- **Environment Variables**: All sensitive data stored in env vars
 
 ### AI Integration
 
@@ -80,6 +115,7 @@ The AI scheduling system uses Google's Gemini model to generate optimal schedule
 - Role requirements and coverage needs
 - Existing leave requests
 - Business rules (5-day work weeks, skill matching)
+- Custom rules provided by the user
 
 ### Key Business Rules
 
@@ -95,12 +131,30 @@ The AI scheduling system uses Google's Gemini model to generate optimal schedule
 - ESLint is configured with Next.js core-web-vitals rules
 - TypeScript is configured in strict mode
 - All UI components are built on Radix UI primitives via Shadcn/ui
-- The Supabase configuration in `supabase/` is for local development
+- Database migrations are handled through Prisma
+- The app supports both development and production environments
 
 ## Environment Setup
 
-Required environment variables (see env.example):
+Required environment variables:
+- `DATABASE_URL`: PostgreSQL connection string (Neon)
+- `NEXTAUTH_URL`: Application URL for authentication
+- `NEXTAUTH_SECRET`: Secret for JWT encryption
 - `GOOGLE_AI_API_KEY`: For AI schedule generation
-- `NEXT_PUBLIC_SUPABASE_URL`: Supabase project URL
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Supabase anonymous key
-- `SUPABASE_SERVICE_ROLE_KEY`: For server-side Supabase operations
+- `GITHUB_ID` & `GITHUB_SECRET`: Optional GitHub OAuth
+
+## Testing and Development
+
+1. Always run `npm run lint` before committing
+2. Use `npm run db:studio` to inspect database during development
+3. Test authentication flow with both credentials and GitHub
+4. Verify drag-and-drop functionality across different scenarios
+5. Check role-based permissions for different user types
+
+## Common Tasks
+
+- **Adding new API endpoints**: Create in `app/api/` with proper authentication
+- **Modifying database schema**: Update `prisma/schema.prisma` and run migrations
+- **Adding new UI components**: Use Shadcn/ui CLI or create in `components/ui/`
+- **Updating business logic**: Modify relevant functions in `lib/db.ts`
+- **Changing authentication**: Update `lib/auth.ts` and middleware

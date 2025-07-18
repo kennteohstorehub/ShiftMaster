@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuth } from '@/components/AuthContext';
-import { ALLOWED_USERS } from '@/lib/supabase';
+import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,6 +11,11 @@ import { Separator } from '@/components/ui/separator';
 import { Crown, User, Mail, Plus, Trash2 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+
+// Temporary allowed users display - in production this would come from the database
+const ALLOWED_USERS = {
+  'kenn.teoh@storehub.com': { role: 'super_admin' },
+};
 
 export function UserManagement() {
   const { isSuperAdmin } = useAuth();

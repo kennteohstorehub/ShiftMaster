@@ -1,0 +1,148 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  role          UserRole  @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastSignInAt  DateTime?
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  USER
+}
+
+// Staff model
+model Staff {
+  id            String          @id @default(cuid())
+  name          String
+  email         String          @unique
+  department    String?
+  skills        String[]        // Array of skills
+  availability  Json            // JSON object for availability
+  workingDays   Int             @default(5)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  
+  shifts        Shift[]
+  leaveRequests LeaveRequest[]
+}
+
+// Role model
+model Role {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  color       String
+  staffNeeded Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  shifts      Shift[]
+}
+
+// Shift model
+model Shift {
+  id        String   @id @default(cuid())
+  date      DateTime @db.Date
+  startTime String   // e.g., "09:00"
+  endTime   String   // e.g., "18:00"
+  staffId   String
+  roleId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  staff     Staff    @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  role      Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  
+  @@unique([date, startTime, staffId])
+  @@index([date])
+  @@index([staffId])
+  @@index([roleId])
+}
+
+// Leave Request model
+model LeaveRequest {
+  id          String          @id @default(cuid())
+  staffId     String
+  startDate   DateTime        @db.Date
+  endDate     DateTime        @db.Date
+  type        LeaveType
+  reason      String?
+  status      LeaveStatus     @default(PENDING)
+  approvedBy  String?
+  approvedAt  DateTime?
+  comments    String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  
+  staff       Staff           @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  
+  @@index([staffId])
+  @@index([status])
+  @@index([startDate, endDate])
+}
+
+enum LeaveType {
+  SICK
+  VACATION
+  MEDICAL
+  PERSONAL
+  EMERGENCY
+  MATERNITY
+  PATERNITY
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+// Task model
+model Task {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  dueDate     DateTime?
+  priority    Priority @default(MEDIUM)
+  status      TaskStatus @default(PENDING)
+  assignedTo  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([status])
+  @@index([assignedTo])
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}

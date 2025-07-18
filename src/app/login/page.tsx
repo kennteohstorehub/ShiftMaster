@@ -1,14 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useAuth } from '@/components/AuthContext'
+import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Bot, Mail, AlertCircle, CheckCircle, Settings } from 'lucide-react'
+import { Bot, Mail, AlertCircle, Github, Lock } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 
 export default function LoginPage() {
@@ -16,41 +16,37 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-  const { signIn, isAuthenticated, loading, isSupabaseConfigured } = useAuth()
+  const { data: session, status } = useSession()
   const router = useRouter()
   const { toast } = useToast()
 
   // Redirect if already authenticated
   useEffect(() => {
-    if (isAuthenticated && !loading) {
+    if (status === 'authenticated') {
       router.push('/dashboard')
     }
-  }, [isAuthenticated, loading, router])
+  }, [status, router])
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleCredentialsLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     setIsLoading(true)
 
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!email || !emailRegex.test(email)) {
-      setError('Please enter a valid email address')
-      setIsLoading(false)
-      return
-    }
-
     try {
-      const result = await signIn(email)
-      
-      if (result.success) {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      })
+
+      if (result?.error) {
+        setError('Invalid email or password')
+      } else {
         toast({
           title: "Welcome back!",
           description: `Signing in as ${email}`,
         })
         router.push('/dashboard')
-      } else {
-        setError(result.error || 'Failed to sign in')
       }
     } catch (error) {
       setError('An unexpected error occurred. Please try again.')
@@ -59,9 +55,18 @@ export default function LoginPage() {
     }
   }
 
+  const handleGitHubLogin = async () => {
+    setIsLoading(true)
+    try {
+      await signIn('github', { callbackUrl: '/dashboard' })
+    } catch (error) {
+      setError('Failed to sign in with GitHub')
+      setIsLoading(false)
+    }
+  }
 
   // Show loading state while checking authentication
-  if (loading) {
+  if (status === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -70,7 +75,7 @@ export default function LoginPage() {
   }
 
   // Don't render login form if already authenticated
-  if (isAuthenticated) {
+  if (status === 'authenticated') {
     return null
   }
 
@@ -88,18 +93,32 @@ export default function LoginPage() {
         </CardHeader>
         
         <CardContent>
-          {/* Development Mode Alert */}
-          {!isSupabaseConfigured && (
-            <Alert className="mb-4">
-              <Settings className="h-4 w-4" />
-              <AlertDescription>
-                <strong>Development Mode:</strong> Supabase authentication is not configured. 
-                Please set up your environment variables to enable full authentication.
-              </AlertDescription>
-            </Alert>
-          )}
+          <div className="space-y-4">
+            {/* GitHub Login */}
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={handleGitHubLogin}
+              disabled={isLoading}
+            >
+              <Github className="h-4 w-4 mr-2" />
+              Sign in with GitHub
+            </Button>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+
+            {/* Credentials Login */}
+            <form onSubmit={handleCredentialsLogin} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email Address</Label>
                 <Input
@@ -136,7 +155,7 @@ export default function LoginPage() {
               <Button 
                 type="submit" 
                 className="w-full" 
-                disabled={isLoading || !isSupabaseConfigured}
+                disabled={isLoading}
               >
                 {isLoading ? (
                   <>
@@ -145,19 +164,20 @@ export default function LoginPage() {
                   </>
                 ) : (
                   <>
-                    <Mail className="h-4 w-4 mr-2" />
-                    {isSupabaseConfigured ? 'Sign In' : 'Setup Required'}
+                    <Lock className="h-4 w-4 mr-2" />
+                    Sign In with Email
                   </>
                 )}
               </Button>
-
-              <div className="text-center text-sm text-muted-foreground">
-                <p>Access is restricted to authorized staff only.</p>
-                <p className="mt-1">Contact your administrator for access.</p>
-              </div>
             </form>
+
+            <div className="text-center text-sm text-muted-foreground">
+              <p>Access is restricted to authorized staff only.</p>
+              <p className="mt-1">Contact your administrator for access.</p>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>
   )
-} 
+}
